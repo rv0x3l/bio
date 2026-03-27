@@ -7,155 +7,202 @@
     <title>rv0x3l // System</title>
     <style>
         :root {
-            --bg: #020202;
+            --bg: #050505;
             --accent: #0088CC;
             --cyan: #00f2ff;
-            --term-bg: rgba(7, 7, 7, 0.98);
-            --border: rgba(0, 242, 255, 0.15);
+            --term-bg: rgba(10, 10, 10, 0.95);
+            --border: rgba(255, 255, 255, 0.05);
         }
 
-        /* Системные шрифты Android, которые поддерживают кириллицу в любой кодировке */
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            font-family: monospace; 
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: monospace; }
 
         body {
             background-color: var(--bg);
-            background-image: radial-gradient(circle at 50% 50%, #001a2c 0%, #020202 100%);
-            color: #eee;
-            padding: 15px;
+            /* Улучшенный фон: темный градиент с сеткой */
+            background-image: 
+                radial-gradient(circle at 50% 10%, #001a2c 0%, #050505 50%),
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 30px 30px, 30px 30px;
+            color: #ccc;
+            padding: 20px;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .header { max-width: 1200px; margin: 0 auto 30px auto; text-align: center; }
-        .header h1 {
-            font-size: 3rem;
+        /* МИНИМАЛИСТИЧНЫЙ ВЕРХНИЙ БАР ВМЕСТО ГИГАНТСКОГО БЛОКА */
+        .top-bar {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 10px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .user-id {
             color: #fff;
-            filter: drop-shadow(0 0 15px var(--accent));
-            margin-bottom: 20px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            opacity: 0.8;
         }
 
-        .btns { display: flex; justify-content: center; gap: 10px; margin-bottom: 40px; flex-wrap: wrap; }
-        .btn {
-            padding: 10px 20px; border: 1px solid var(--border); color: #fff;
-            text-decoration: none; font-size: 0.8rem; text-transform: uppercase;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 4px;
+        .system-status {
+            font-size: 0.7rem;
+            color: var(--cyan);
+            text-transform: uppercase;
         }
 
+        /* КНОПКИ ТЕПЕРЬ СТРОГИЕ И МАЛЕНЬКИЕ */
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.75rem;
+            border: 1px solid transparent;
+            padding: 5px 10px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--cyan);
+            border-color: var(--cyan);
+        }
+
+        /* СЕТКА КОНСОЛЕЙ */
         .dashboard {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+            gap: 20px;
+            width: 100%;
             max-width: 1200px;
-            margin: 0 auto;
         }
 
-        @media (max-width: 800px) { .dashboard { grid-template-columns: 1fr; } }
+        @media (max-width: 900px) { .dashboard { grid-template-columns: 1fr; } }
 
         .terminal {
-            background: var(--term-bg); border: 1px solid var(--border);
-            border-radius: 6px; overflow: hidden;
+            background: var(--term-bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         .term-header {
-            background: #0d0d0d; padding: 10px 15px; display: flex;
-            justify-content: space-between; border-bottom: 1px solid #1a1a1a;
+            background: #111;
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #1a1a1a;
         }
-        .dots { display: flex; gap: 6px; }
-        .dot { width: 10px; height: 10px; border-radius: 50%; background: #222; }
-        .active-dot { background: var(--accent); }
-        .title { font-size: 0.7rem; color: #444; }
 
-        .term-body { padding: 15px; font-size: 0.9rem; line-height: 1.6; color: #999; }
-        .prompt { color: var(--cyan); }
+        .dots { display: flex; gap: 6px; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: #222; }
+        .active-dot { background: #444; }
+
+        .term-title { font-size: 0.65rem; color: #555; text-transform: lowercase; }
+
+        .term-body { padding: 20px; font-size: 0.85rem; line-height: 1.6; }
+        .prompt { color: var(--accent); }
         .cmd { color: #fff; margin-left: 8px; }
         .green { color: #00ff41; }
         .blue { color: var(--accent); }
+        .gray { color: #555; }
+
+        .progress { width: 100%; height: 2px; background: #111; margin: 15px 0; }
+        .fill { height: 100%; background: var(--accent); width: 100%; }
+
     </style>
 </head>
 <body>
 
-<div class="header">
-    <h1>rv0x3l</h1>
-    <div class="btns">
-        <a href="https://t.me/rv0x3l" class="btn">Telegram</a>
-        <a href="https://github.com/rv0x3l" class="btn">GitHub</a>
-        <a href="https://t.me/freakovshop" class="btn">Store</a>
-    </div>
-</div>
-
-<div class="dashboard">
-
-    <div class="terminal">
-        <div class="term-header">
-            <div class="dots"><div class="dot active-dot"></div><div class="dot"></div><div class="dot"></div></div>
-            <div class="title">профиль.sh</div>
+    <div class="top-bar">
+        <div class="user-id">Website: rv0x3l</div>
+        <div class="nav-links">
+            <a href="https://t.me/rv0x3l">TELEGRAM</a>
+            <a href="https://github.com/rv0x3l">GITHUB</a>
+            <a href="https://t.me/freakovshop">STORE</a>
         </div>
-        <div class="term-body">
-            <span class="prompt">rv0x3l@sys:~$</span> <span class="cmd">whoami</span>
-            <div style="margin-top: 8px;">
-                ИМЯ: <span class="blue">rv0x3l</span><br>
-                ВОЗРАСТ: <span class="blue">17 лет</span><br>
-                СТАТУС: <span class="green">Fullstack Разработчик</span><br>
-                ОС: <span class="blue">Linux / System-V</span>
+        <div class="system-status">Biography</div>
+    </div>
+
+    <div class="dashboard">
+
+        <div class="terminal">
+            <div class="term-header">
+                <div class="dots"><div class="dot active-dot"></div><div class="dot"></div><div class="dot"></div></div>
+                <div class="term-title">identity.core</div>
+            </div>
+            <div class="term-body">
+                <span class="prompt">$</span> <span class="cmd">whoami</span>
+                <div style="margin-top: 10px;">
+                    <span class="gray">NAME:</span> rv0x3l (Воксель)<br>
+                    <span class="gray">AGE:</span> 17<br>
+                    <span class="gray">ROLE:</span> Fullstack Dev<br>
+                    <span class="gray">OS:</span> Archlinux
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="terminal">
-        <div class="term-header">
-            <div class="dots"><div class="dot"></div><div class="dot active-dot"></div><div class="dot"></div></div>
-            <div class="title">инструменты.log</div>
-        </div>
-        <div class="term-body">
-            <span class="prompt">rv0x3l@sys:~$</span> <span class="cmd">ls --skills</span>
-            <div style="margin-top: 8px;">
-                - Код: <span class="green">Python, C++, C#, JS</span><br>
-                - Веб: <span class="green">HTML5, CSS3, React</span><br>
-                - Базы: <span class="green">PostgreSQL, Supabase</span><br>
-                - Рут: <span class="green">APatch, KernelSU</span>
+        <div class="terminal">
+            <div class="term-header">
+                <div class="dots"><div class="dot"></div><div class="dot active-dot"></div><div class="dot"></div></div>
+                <div class="term-title">stack.info</div>
+            </div>
+            <div class="term-body">
+                <span class="prompt">$</span> <span class="cmd">ls --skills</span>
+                <div style="margin-top: 10px;">
+                    <span class="green">●</span> Python, C++, C#, JS<br>
+                    <span class="green">●</span> HTML5, CSS3, React<br>
+                    <span class="green">●</span> PostgreSQL, Supabase<br>
+                    <span class="green">●</span> APatch, KernelSU
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="terminal">
-        <div class="term-header">
-            <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot active-dot"></div></div>
-            <div class="title">git: rv0x3l/bio</div>
-        </div>
-        <div class="term-body">
-            <span class="prompt">rv0x3l@sys:~/bio$</span> <span class="cmd">git push origin main</span>
-            <div style="margin-top: 8px;">
-                > Сжатие данных... [OK]<br>
-                > Запись данных: 100% (3/3)<br>
-                > <span class="green">Деплой успешно завершен!</span><br>
-                > На https://rv0x3l.su/bio.git
+        <div class="terminal">
+            <div class="term-header">
+                <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot active-dot"></div></div>
+                <div class="term-title">git: bio</div>
+            </div>
+            <div class="term-body">
+                <span class="prompt">$</span> <span class="cmd">git push origin main</span>
+                <div style="margin-top: 10px;">
+                    <span class="gray">> Compressing... [OK]</span><br>
+                    <span class="gray">> Sending objects... 100%</span><br>
+                    <span class="green">Deployment successful!</span><br>
+                    <span class="gray">> To rv0x3l.su/bio.git</span>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="terminal">
-        <div class="term-header">
-            <div class="dots"><div class="dot active-dot"></div><div class="dot active-dot"></div><div class="dot active-dot"></div></div>
-            <div class="title">железо.info</div>
-        </div>
-        <div class="term-body">
-            <span class="prompt">rv0x3l@sys:~$</span> <span class="cmd">specs --status</span>
-            <div style="margin-top: 8px;">
-                ЦПУ: <span class="blue">i5-2450M @ 2.50GHz</span><br>
-                ОЗУ: <span class="blue">6GB DDR3</span><br>
-                ПЗУ: <span class="blue">512GB HDD</span><br>
-                БИОС: <span class="green">РАЗБЛОКИРОВАН</span>
+        <div class="terminal">
+            <div class="term-header">
+                <div class="dots"><div class="dot active-dot"></div><div class="dot active-dot"></div><div class="dot active-dot"></div></div>
+                <div class="term-title">hw.stat</div>
+            </div>
+            <div class="term-body">
+                <span class="prompt">$</span> <span class="cmd">specs --status</span>
+                <div style="margin-top: 10px;">
+                    <span class="gray">CPU:</span> i5-2450M @ 2.50GHz<br>
+                    <span class="gray">RAM:</span> 6GB DDR3<br>
+                    <span class="gray">HDD:</span> 512GB (Reading...)<br>
+                    <span class="gray">BOOT:</span> GRUB 2
+                    <div class="progress"><div class="fill"></div></div>
+                </div>
             </div>
         </div>
-    </div>
 
-</div>
+    </div>
 
 </body>
-            </html>
-            
+</html>
