@@ -1,897 +1,110 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>rv0x3l — fullstack developer & red team operator</title>
-<meta name="description" content="rv0x3l — 17-летний fullstack-разработчик и red team операционист. Python, Go, C++, OSINT, эксплуатация, CTF.">
-<meta property="og:title" content="rv0x3l — fullstack developer & red team operator">
-<meta property="og:description" content="Fullstack developer and red team operator. Python, Go, C++, OSINT, CTF.">
-<meta property="og:type" content="website">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>rv0x3l</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
 <style>
-
-  :root {
-    --bg: #FFFFFF;
-    --bg-subtle: #FAFAFA;
-    --ink: #0A0A0A;
-    --ink-secondary: #666666;
-    --ink-tertiary: #999999;
-    --border: #EAEAEA;
-    --border-strong: #D4D4D4;
-    --accent: #0055FF;
-    --accent-dim: #0055FF0d;
-    --success: #17B26A;
-
-    --font-display: 'Inter Tight', 'Inter', -apple-system, sans-serif;
-    --font-body: 'Inter', -apple-system, sans-serif;
-    --font-mono: 'JetBrains Mono', 'Courier New', monospace;
-
-    --gutter: clamp(20px, 6vw, 64px);
-    --max-w: 1040px;
+:root {
+  --bg: #f7f8fa;
+  --text: #15171a;
+  --muted: #5b616b;
+  --rule: #d9dce1;
+  --link: #1a4fd6;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14161a; --text: #e8eaed; --muted: #9aa1ac; --rule: #2c3037; --link: #7da2ff;
+    color-scheme: dark;
   }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  html {
-    scroll-behavior: smooth;
-    overflow-x: hidden;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-    }
-  }
-
-  body {
-    background: var(--bg);
-    color: var(--ink);
-    font-family: var(--font-body);
-    line-height: 1.55;
-    -webkit-font-smoothing: antialiased;
-    font-size: 15px;
-    overflow-x: hidden;
-    width: 100%;
-  }
-
-  ::selection { background: var(--accent); color: #fff; }
-
-  a { color: inherit; text-decoration: none; }
-
-  :focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-    border-radius: 2px;
-  }
-
-  /* ---------- nav ---------- */
-
-  nav {
-    position: sticky;
-    top: 0;
-    z-index: 30;
-    background: rgba(255,255,255,0.82);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--border);
-    padding: 0 var(--gutter);
-  }
-
-  .nav-inner {
-    max-width: var(--max-w);
-    margin: 0 auto;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .nav-brand {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 14.5px;
-    letter-spacing: -0.01em;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 28px;
-  }
-
-  .nav-link {
-    font-size: 13.5px;
-    color: var(--ink-secondary);
-    transition: color 0.15s ease;
-  }
-
-  .nav-link:hover { color: var(--ink); }
-
-  @media (max-width: 640px) {
-    .nav-links a:not(.lang-switch) { display: none; }
-  }
-
-  .lang-switch {
-    display: flex;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    overflow: hidden;
-  }
-
-  .lang-btn {
-    background: transparent;
-    border: none;
-    color: var(--ink-secondary);
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.03em;
-    padding: 5px 10px;
-    cursor: pointer;
-    transition: background 0.15s ease, color 0.15s ease;
-  }
-
-  .lang-btn.active { background: var(--ink); color: var(--bg); }
-  .lang-btn:not(.active):hover { color: var(--ink); background: var(--bg-subtle); }
-
-  /* ---------- layout shell ---------- */
-
-  main { max-width: var(--max-w); margin: 0 auto; padding: 0 var(--gutter); }
-
-  section {
-    padding: clamp(64px, 11vw, 140px) 0;
-    border-bottom: 1px solid var(--border);
-  }
-
-  section:last-of-type { border-bottom: none; }
-
-  .eyebrow {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: 0.04em;
-    color: var(--ink-tertiary);
-    text-transform: uppercase;
-    margin-bottom: 16px;
-    display: block;
-  }
-
-  .sec-title {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: clamp(24px, 3.2vw, 32px);
-    letter-spacing: -0.02em;
-    margin-bottom: 12px;
-  }
-
-  .sec-desc {
-    font-size: 15px;
-    color: var(--ink-secondary);
-    max-width: 52ch;
-    margin-bottom: 48px;
-  }
-
-  /* ---------- hero ---------- */
-
-  .hero {
-    padding-top: clamp(72px, 13vw, 160px);
-    padding-bottom: clamp(56px, 10vw, 120px);
-  }
-
-  .status-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 14px 6px 10px;
-    border: 1px solid var(--border);
-    border-radius: 100px;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--ink-secondary);
-    margin-bottom: 32px;
-  }
-
-  .status-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--success);
-    position: relative;
-    flex-shrink: 0;
-  }
-
-  .status-dot::after {
-    content: '';
-    position: absolute;
-    inset: -4px;
-    border-radius: 50%;
-    border: 1px solid var(--success);
-    animation: ring 2.2s ease-out infinite;
-  }
-
-  @keyframes ring {
-    0% { transform: scale(0.6); opacity: 0.9; }
-    100% { transform: scale(1.8); opacity: 0; }
-  }
-
-  .hero h1 {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: clamp(38px, 6.4vw, 72px);
-    line-height: 1.03;
-    letter-spacing: -0.03em;
-    max-width: 16ch;
-    margin-bottom: 24px;
-  }
-
-  .hero h1 .accent { color: var(--accent); }
-
-  .hero-lede {
-    font-size: clamp(16px, 1.8vw, 19px);
-    color: var(--ink-secondary);
-    max-width: 56ch;
-    margin-bottom: 40px;
-    line-height: 1.6;
-  }
-
-  .hero-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 56px;
-  }
-
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    padding: 11px 20px;
-    border-radius: 8px;
-    transition: transform 0.12s ease, background 0.15s ease, border-color 0.15s ease;
-  }
-
-  .btn-primary {
-    background: var(--ink);
-    color: #fff;
-  }
-
-  .btn-primary:hover { background: #262626; transform: translateY(-1px); }
-
-  .btn-secondary {
-    border: 1px solid var(--border-strong);
-    color: var(--ink);
-  }
-
-  .btn-secondary:hover { border-color: var(--ink); background: var(--bg-subtle); }
-
-  .hero-meta {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    overflow: hidden;
-  }
-
-  .meta-cell {
-    background: var(--bg);
-    padding: 18px 20px;
-  }
-
-  .meta-cell .k {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--ink-tertiary);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    display: block;
-    margin-bottom: 6px;
-  }
-
-  .meta-cell .v {
-    font-size: 14.5px;
-    font-weight: 500;
-  }
-
-  /* ---------- about ---------- */
-
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1.6fr;
-    gap: 56px;
-  }
-
-  @media (max-width: 760px) {
-    .about-grid { grid-template-columns: 1fr; gap: 32px; }
-  }
-
-  .about-body p {
-    font-size: 15.5px;
-    color: var(--ink);
-    margin-bottom: 18px;
-    line-height: 1.7;
-  }
-
-  .about-body p:last-child { margin-bottom: 0; }
-  .about-body strong { font-weight: 600; }
-
-  .about-side {
-    font-family: var(--font-mono);
-    font-size: 12.5px;
-    color: var(--ink-secondary);
-    border-left: 2px solid var(--border);
-    padding-left: 20px;
-  }
-
-  .about-side .side-item {
-    padding: 10px 0;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .about-side .side-item:last-child { border-bottom: none; }
-  .about-side .side-item .k { color: var(--ink-tertiary); display: block; margin-bottom: 3px; }
-  .about-side .side-item .v { color: var(--ink); }
-
-  /* ---------- arsenal ---------- */
-
-  .arsenal-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-
-  .arsenal-card {
-    background: var(--bg);
-    padding: 24px;
-    transition: background 0.15s ease;
-  }
-
-  .arsenal-card:hover { background: var(--bg-subtle); }
-
-  .arsenal-card h3 {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 14px;
-    margin-bottom: 18px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .arsenal-card h3::before {
-    content: '';
-    width: 6px;
-    height: 6px;
-    border-radius: 2px;
-    background: var(--accent);
-    flex-shrink: 0;
-  }
-
-  .skill-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 0;
-    font-size: 13.5px;
-  }
-
-  .skill-bar {
-    width: 44px;
-    height: 3px;
-    background: var(--border);
-    border-radius: 2px;
-    overflow: hidden;
-    flex-shrink: 0;
-  }
-
-  .skill-bar span {
-    display: block;
-    height: 100%;
-    background: var(--ink);
-    border-radius: 2px;
-  }
-
-  .skill-row-inner {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  /* ---------- principles ---------- */
-
-  .principles-list {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .principle-row {
-    display: grid;
-    grid-template-columns: 32px 1fr;
-    gap: 20px;
-    padding: 26px 0;
-    border-top: 1px solid var(--border);
-    align-items: baseline;
-  }
-
-  .principle-row:first-child { border-top: none; padding-top: 0; }
-
-  .principle-num {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--ink-tertiary);
-  }
-
-  .principle-title {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 17px;
-    margin-bottom: 4px;
-  }
-
-  .principle-desc {
-    font-size: 14px;
-    color: var(--ink-secondary);
-    max-width: 58ch;
-  }
-
-  @media (max-width: 560px) {
-    .principle-row { grid-template-columns: 1fr; gap: 6px; }
-  }
-
-  /* ---------- connect ---------- */
-
-  .connect-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 14px;
-  }
-
-  .connect-card {
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 22px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    transition: border-color 0.15s ease, transform 0.15s ease;
-  }
-
-  .connect-card:hover {
-    border-color: var(--ink);
-    transform: translateY(-2px);
-  }
-
-  .connect-icon-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-  }
-
-  .connect-proto {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--ink-tertiary);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-
-  .connect-arrow {
-    color: var(--ink-tertiary);
-    transition: transform 0.15s ease, color 0.15s ease;
-  }
-
-  .connect-card:hover .connect-arrow { color: var(--accent); transform: translate(2px, -2px); }
-
-  .connect-value {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 16px;
-  }
-
-  /* ---------- footer ---------- */
-
-  footer {
-    padding: 32px var(--gutter) 48px;
-    max-width: var(--max-w);
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 12.5px;
-    color: var(--ink-tertiary);
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-
-  .footer-status {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--font-mono);
-    font-size: 11.5px;
-  }
-
+}
+:root[data-theme="dark"] {
+  --bg: #14161a; --text: #e8eaed; --muted: #9aa1ac; --rule: #2c3037; --link: #7da2ff;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: inherit; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 18px;
+  line-height: 1.6;
+}
+main {
+  max-width: 38rem;
+  margin: 0 auto;
+  padding: 4.5rem 1.5rem 5rem;
+}
+h1 {
+  margin: 0;
+  font-family: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-weight: 500;
+  font-size: clamp(2.6rem, 11vw, 4rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+.lead { margin: 1rem 0 0; color: var(--muted); }
+section { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); }
+h2 { margin: 0 0 1rem; font-size: 1.1rem; font-weight: 500; }
+p { margin: 0 0 1rem; max-width: 34rem; }
+p:last-child { margin-bottom: 0; }
+dl { margin: 0; }
+.row { display: flex; justify-content: space-between; gap: 1rem; padding: .45rem 0; border-bottom: 1px solid var(--rule); }
+.row:last-child { border-bottom: 0; }
+dt { font-weight: 500; display: flex; align-items: center; gap: .6rem; }
+.ic { width: 1.1em; height: 1.1em; flex: none; }
+dd { margin: 0; color: var(--muted); text-align: right; overflow-wrap: anywhere; }
+.muted { color: var(--muted); }
+a { color: var(--link); text-underline-offset: .2em; }
+a:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
 </style>
 </head>
 <body>
-
-<nav>
-  <div class="nav-inner">
-    <span class="nav-brand">rv0x3l</span>
-    <div class="nav-links">
-      <a class="nav-link" href="#about" data-i18n="nav.about">About</a>
-      <a class="nav-link" href="#arsenal" data-i18n="nav.arsenal">Arsenal</a>
-      <a class="nav-link" href="#principles" data-i18n="nav.principles">Principles</a>
-      <a class="nav-link" href="#connect" data-i18n="nav.connect">Connect</a>
-      <div class="lang-switch" role="group" aria-label="Language">
-        <button class="lang-btn active" data-lang="ru" aria-pressed="true">RU</button>
-        <button class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
-      </div>
-    </div>
-  </div>
-</nav>
-
 <main>
+  <header>
+    <h1>rv0x3l</h1>
+    <p class="lead">Воксель, 17 лет. Grey hat разработчик.</p>
+  </header>
 
-  <section class="hero">
-    <div class="status-pill">
-      <span class="status-dot"></span>
-      <span data-i18n="hero.status">available for collaboration</span>
-    </div>
-
-    <h1 data-i18n="hero.title">Пишу код.<br>Ломаю системы.<br><span class="accent">Легально.</span></h1>
-
-    <p class="hero-lede" data-i18n="hero.lede">17 лет, fullstack-разработчик и red team операционист. Python, Go, C++ на бэкенде — OSINT и эксплуатация на стороне атаки.</p>
-
-    <div class="hero-actions">
-      <a class="btn btn-primary" href="#connect" data-i18n="hero.cta.primary">Связаться</a>
-      <a class="btn btn-secondary" href="#arsenal" data-i18n="hero.cta.secondary">Посмотреть стек</a>
-    </div>
-
-    <div class="hero-meta">
-      <div class="meta-cell">
-        <span class="k" data-i18n="meta.role.k">Роль</span>
-        <span class="v" data-i18n="meta.role.v">Fullstack / Red Team</span>
-      </div>
-      <div class="meta-cell">
-        <span class="k" data-i18n="meta.stack.k">Стек</span>
-        <span class="v">Python · Go · C++</span>
-      </div>
-      <div class="meta-cell">
-        <span class="k" data-i18n="meta.focus.k">Фокус</span>
-        <span class="v" data-i18n="meta.focus.v">CTF, OSINT</span>
-      </div>
-      <div class="meta-cell">
-        <span class="k" data-i18n="meta.ai.k">ИИ в работе</span>
-        <span class="v" data-i18n="meta.ai.v">Открыто, честно</span>
-      </div>
-    </div>
+  <section>
+    <h2>О себе</h2>
+    <p>Я открыто вайбкодер: пишу код вместе с ИИ и не скрываю этого. Параллельно потихоньку изучаю языки, чтобы понимать, что именно я пишу.</p>
+    <p>Лучше всего знаю Python.</p>
   </section>
 
-  <section id="about">
-    <span class="eyebrow" data-i18n="about.eyebrow">О себе</span>
-    <h2 class="sec-title" data-i18n="about.title">Как я работаю</h2>
-    <p class="sec-desc" data-i18n="about.desc">Коротко о подходе и о том, откуда растёт стек</p>
-
-    <div class="about-grid">
-      <div class="about-side">
-        <div class="side-item">
-          <span class="k" data-i18n="about.side.age.k">Возраст</span>
-          <span class="v">17</span>
-        </div>
-        <div class="side-item">
-          <span class="k" data-i18n="about.side.start.k">Начал с</span>
-          <span class="v">Python</span>
-        </div>
-        <div class="side-item">
-          <span class="k" data-i18n="about.side.now.k">Сейчас</span>
-          <span class="v" data-i18n="about.side.now.v">Golang</span>
-        </div>
-        <div class="side-item">
-          <span class="k" data-i18n="about.side.learning.k">Изучаю</span>
-          <span class="v">C++</span>
-        </div>
-      </div>
-
-      <div class="about-body">
-        <p data-i18n="about.p1">Начал с Python, сейчас плотно работаю с Golang для быстрых и лёгких тулзов. C++ пока в режиме обучения — он учит думать иначе, и в этом его ценность.</p>
-        <p data-i18n="about.p2">По стеку — фуллстек. Бэкенд на MySQL / MariaDB / PostgreSQL, фронтенд на ванильных HTML / CSS / JS. Не потому что не умею фреймворки, а потому что знаю, как всё работает под капотом.</p>
-        <p data-i18n="about.p3"><strong>Red Team</strong> для меня — не эстетика, а инженерия. Понять систему глубже, чем её создатель. Найти, где она ломается. Доказать. Задокументировать.</p>
-        <p data-i18n="about.p4">Использую ИИ для сложных расчётов и нетривиальных задач и не скрываю это. Реальная сила не в отказе от помощи, а в умении задавать правильные вопросы и проверять ответы.</p>
-      </div>
-    </div>
+  <section>
+    <h2>Стек</h2>
+    <dl>
+      <div class="row"><dt><svg class="ic" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M11.858 0c-.978.005-1.913.088-2.736.234C6.7.662 6.26 1.558 6.26 3.21v2.182h5.725v.727H4.111c-1.664 0-3.121 1-3.577 2.903-.526 2.181-.549 3.542 0 5.82.407 1.694 1.379 2.902 3.043 2.902h1.969v-2.616c0-1.89 1.635-3.557 3.576-3.557h5.72c1.591 0 2.862-1.31 2.862-2.91v-5.45c0-1.553-1.309-2.718-2.863-2.977A18 18 0 0 0 11.858 0M8.762 1.755c.591 0 1.074.491 1.074 1.095 0 .601-.483 1.087-1.074 1.087A1.08 1.08 0 0 1 7.688 2.85c0-.604.48-1.095 1.074-1.095m9.656 4.364v2.543c0 1.971-1.671 3.63-3.577 3.63H9.122c-1.566 0-2.862 1.34-2.862 2.91v5.452c0 1.551 1.349 2.464 2.862 2.91 1.813.532 3.55.628 5.72 0 1.44-.418 2.862-1.258 2.862-2.91V18.47h-5.719v-.727h8.582c1.664 0 2.284-1.16 2.862-2.903.598-1.793.573-3.518 0-5.819-.41-1.656-1.196-2.903-2.862-2.903zm-3.216 13.807a1.08 1.08 0 0 1 1.074 1.088c0 .604-.48 1.094-1.074 1.094-.592 0-1.075-.49-1.075-1.094 0-.601.483-1.088 1.075-1.088"/></svg>Python</dt><dd>знаю хорошо</dd></div>
+      <div class="row"><dt><svg class="ic" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M1.811 10.231c-.047 0-.058-.023-.035-.059l.246-.315c.023-.035.081-.058.128-.058h4.172c.046 0 .058.035.035.07l-.199.303c-.023.036-.082.07-.117.07zM.047 11.306c-.047 0-.059-.023-.035-.058l.245-.316c.023-.035.082-.058.129-.058h5.328c.047 0 .07.035.058.07l-.093.28c-.012.047-.058.07-.105.07zm2.828 1.075c-.047 0-.059-.035-.035-.07l.163-.292c.023-.035.07-.07.117-.07h2.337c.047 0 .07.035.07.082l-.023.28c0 .047-.047.082-.082.082zm12.129-2.36c-.736.187-1.239.327-1.963.514-.176.046-.187.058-.34-.117-.174-.199-.303-.327-.548-.444-.737-.362-1.45-.257-2.115.175-.795.514-1.204 1.274-1.192 2.22.011.935.654 1.706 1.577 1.835.795.105 1.46-.175 1.987-.77.105-.13.198-.27.315-.434H10.47c-.245 0-.304-.152-.222-.35.152-.362.432-.97.596-1.274a.315.315 0 01.292-.187h4.253c-.023.316-.023.631-.07.947a4.983 4.983 0 01-.958 2.29c-.841 1.11-1.94 1.8-3.33 1.986-1.145.152-2.209-.07-3.143-.77-.865-.655-1.356-1.52-1.484-2.595-.152-1.274.222-2.419.993-3.424.83-1.086 1.928-1.776 3.272-2.02 1.098-.2 2.15-.07 3.096.571.62.41 1.063.97 1.356 1.648.07.105.023.164-.117.2m3.868 6.461c-1.064-.024-2.034-.328-2.852-1.029a3.665 3.665 0 01-1.262-2.255c-.21-1.32.152-2.489.947-3.529.853-1.122 1.881-1.706 3.272-1.95 1.192-.21 2.314-.095 3.33.595.923.63 1.496 1.484 1.648 2.605.198 1.578-.257 2.863-1.344 3.962-.771.783-1.718 1.273-2.805 1.495-.315.06-.63.07-.934.106zm2.78-4.72c-.011-.153-.011-.27-.034-.387-.21-1.157-1.274-1.81-2.384-1.554-1.087.245-1.788.935-2.045 2.033-.21.912.234 1.835 1.075 2.21.643.28 1.285.244 1.905-.07.923-.48 1.425-1.228 1.484-2.233z"/></svg>Go</dt><dd>изучаю</dd></div>
+      <div class="row"><dt><svg class="ic" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M23.8346 11.7033l-1.0073-.6236a13.7268 13.7268 0 00-.0283-.2936l.8656-.8069a.3483.3483 0 00-.1154-.578l-1.1066-.414a8.4958 8.4958 0 00-.087-.2856l.6904-.9587a.3462.3462 0 00-.2257-.5446l-1.1663-.1894a9.3574 9.3574 0 00-.1407-.2622l.49-1.0761a.3437.3437 0 00-.0274-.3361.3486.3486 0 00-.3006-.154l-1.1845.0416a6.7444 6.7444 0 00-.1873-.2268l.2723-1.153a.3472.3472 0 00-.417-.4172l-1.1532.2724a14.0183 14.0183 0 00-.2278-.1873l.0415-1.1845a.3442.3442 0 00-.49-.328l-1.076.491c-.0872-.0476-.1742-.0952-.2623-.1407l-.1903-1.1673A.3483.3483 0 0016.256.955l-.9597.6905a8.4867 8.4867 0 00-.2855-.086l-.414-1.1066a.3483.3483 0 00-.5781-.1154l-.8069.8666a9.2936 9.2936 0 00-.2936-.0284L12.2946.1683a.3462.3462 0 00-.5892 0l-.6236 1.0073a13.7383 13.7383 0 00-.2936.0284L9.9803.3374a.3462.3462 0 00-.578.1154l-.4141 1.1065c-.0962.0274-.1903.0567-.2855.086L7.744.955a.3483.3483 0 00-.5447.2258L7.009 2.348a9.3574 9.3574 0 00-.2622.1407l-1.0762-.491a.3462.3462 0 00-.49.328l.0416 1.1845a7.9826 7.9826 0 00-.2278.1873L3.8413 3.425a.3472.3472 0 00-.4171.4171l.2713 1.1531c-.0628.075-.1255.1509-.1863.2268l-1.1845-.0415a.3462.3462 0 00-.328.49l.491 1.0761a9.167 9.167 0 00-.1407.2622l-1.1662.1894a.3483.3483 0 00-.2258.5446l.6904.9587a13.303 13.303 0 00-.087.2855l-1.1065.414a.3483.3483 0 00-.1155.5781l.8656.807a9.2936 9.2936 0 00-.0283.2935l-1.0073.6236a.3442.3442 0 000 .5892l1.0073.6236c.008.0982.0182.1964.0283.2936l-.8656.8079a.3462.3462 0 00.1155.578l1.1065.4141c.0273.0962.0567.1914.087.2855l-.6904.9587a.3452.3452 0 00.2268.5447l1.1662.1893c.0456.088.0922.1751.1408.2622l-.491 1.0762a.3462.3462 0 00.328.49l1.1834-.0415c.0618.0769.1235.1528.1873.2277l-.2713 1.1541a.3462.3462 0 00.4171.4161l1.153-.2713c.075.0638.151.1255.2279.1863l-.0415 1.1845a.3442.3442 0 00.49.327l1.0761-.49c.087.0486.1741.0951.2622.1407l.1903 1.1662a.3483.3483 0 00.5447.2268l.9587-.6904a9.299 9.299 0 00.2855.087l.414 1.1066a.3452.3452 0 00.5781.1154l.8079-.8656c.0972.0111.1954.0203.2936.0294l.6236 1.0073a.3472.3472 0 00.5892 0l.6236-1.0073c.0982-.0091.1964-.0183.2936-.0294l.8069.8656a.3483.3483 0 00.578-.1154l.4141-1.1066a8.4626 8.4626 0 00.2855-.087l.9587.6904a.3452.3452 0 00.5447-.2268l.1903-1.1662c.088-.0456.1751-.0931.2622-.1407l1.0762.49a.3472.3472 0 00.49-.327l-.0415-1.1845a6.7267 6.7267 0 00.2267-.1863l1.1531.2713a.3472.3472 0 00.4171-.416l-.2713-1.1542c.0628-.0749.1255-.1508.1863-.2278l1.1845.0415a.3442.3442 0 00.328-.49l-.49-1.076c.0475-.0872.0951-.1742.1407-.2623l1.1662-.1893a.3483.3483 0 00.2258-.5447l-.6904-.9587.087-.2855 1.1066-.414a.3462.3462 0 00.1154-.5781l-.8656-.8079c.0101-.0972.0202-.1954.0283-.2936l1.0073-.6236a.3442.3442 0 000-.5892zm-6.7413 8.3551a.7138.7138 0 01.2986-1.396.714.714 0 11-.2997 1.396zm-.3422-2.3142a.649.649 0 00-.7715.5l-.3573 1.6685c-1.1035.501-2.3285.7795-3.6193.7795a8.7368 8.7368 0 01-3.6951-.814l-.3574-1.6684a.648.648 0 00-.7714-.499l-1.473.3158a8.7216 8.7216 0 01-.7613-.898h7.1676c.081 0 .1356-.0141.1356-.088v-2.536c0-.074-.0536-.0881-.1356-.0881h-2.0966v-1.6077h2.2677c.2065 0 1.1065.0587 1.394 1.2088.0901.3533.2875 1.5044.4232 1.8729.1346.413.6833 1.2381 1.2685 1.2381h3.5716a.7492.7492 0 00.1296-.0131 8.7874 8.7874 0 01-.8119.9526zM6.8369 20.024a.714.714 0 11-.2997-1.396.714.714 0 01.2997 1.396zM4.1177 8.9972a.7137.7137 0 11-1.304.5791.7137.7137 0 011.304-.579zm-.8352 1.9813l1.5347-.6824a.65.65 0 00.33-.8585l-.3158-.7147h1.2432v5.6025H3.5669a8.7753 8.7753 0 01-.2834-3.348zm6.7343-.5437V8.7836h2.9601c.153 0 1.0792.1772 1.0792.8697 0 .575-.7107.7815-1.2948.7815zm10.7574 1.4862c0 .2187-.008.4363-.0243.651h-.9c-.09 0-.1265.0586-.1265.1477v.413c0 .973-.5487 1.1846-1.0296 1.2382-.4576.0517-.9648-.1913-1.0275-.4717-.2704-1.5186-.7198-1.8436-1.4305-2.4034.8817-.5599 1.799-1.386 1.799-2.4915 0-1.1936-.819-1.9458-1.3769-2.3153-.7825-.5163-1.6491-.6195-1.883-.6195H5.4682a8.7651 8.7651 0 014.907-2.7699l1.0974 1.151a.648.648 0 00.9182.0213l1.227-1.1743a8.7753 8.7753 0 016.0044 4.2762l-.8403 1.8982a.652.652 0 00.33.8585l1.6178.7188c.0283.2875.0425.577.0425.8717zm-9.3006-9.5993a.7128.7128 0 11.984 1.0316.7137.7137 0 01-.984-1.0316zm8.3389 6.71a.7107.7107 0 01.9395-.3625.7137.7137 0 11-.9405.3635z"/></svg>Rust</dt><dd>изучаю</dd></div>
+      <div class="row"><dt><svg class="ic" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M22.394 6c-.167-.29-.398-.543-.652-.69L12.926.22c-.509-.294-1.34-.294-1.848 0L2.26 5.31c-.508.293-.923 1.013-.923 1.6v10.18c0 .294.104.62.271.91.167.29.398.543.652.69l8.816 5.09c.508.293 1.34.293 1.848 0l8.816-5.09c.254-.147.485-.4.652-.69.167-.29.27-.616.27-.91V6.91c.003-.294-.1-.62-.268-.91zM12 19.11c-3.92 0-7.109-3.19-7.109-7.11 0-3.92 3.19-7.11 7.11-7.11a7.133 7.133 0 016.156 3.553l-3.076 1.78a3.567 3.567 0 00-3.08-1.78A3.56 3.56 0 008.444 12 3.56 3.56 0 0012 15.555a3.57 3.57 0 003.08-1.778l3.078 1.78A7.135 7.135 0 0112 19.11zm7.11-6.715h-.79v.79h-.79v-.79h-.79v-.79h.79v-.79h.79v.79h.79zm2.962 0h-.79v.79h-.79v-.79h-.79v-.79h.79v-.79h.79v.79h.79z"/></svg>C++</dt><dd>изучаю</dd></div>
+      <div class="row"><dt><svg class="ic" aria-hidden="true" viewBox="0 0 128 128" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M117.5 33.5l.3-.2c-.6-1.1-1.5-2.1-2.4-2.6L67.1 2.9c-.8-.5-1.9-.7-3.1-.7-1.2 0-2.3.3-3.1.7l-48 27.9c-1.7 1-2.9 3.5-2.9 5.4v55.7c0 1.1.2 2.3.9 3.4l-.2.1c.5.8 1.2 1.5 1.9 1.9l48.2 27.9c.8.5 1.9.7 3.1.7 1.2 0 2.3-.3 3.1-.7l48-27.9c1.7-1 2.9-3.5 2.9-5.4V36.1c.1-.8 0-1.7-.4-2.6zm-53.5 70c-21.8 0-39.5-17.7-39.5-39.5S42.2 24.5 64 24.5c14.7 0 27.5 8.1 34.3 20l-13 7.5C81.1 44.5 73.1 39.5 64 39.5c-13.5 0-24.5 11-24.5 24.5s11 24.5 24.5 24.5c9.1 0 17.1-5 21.3-12.4l12.9 7.6c-6.8 11.8-19.6 19.8-34.2 19.8zM115 62h-3.2l-.9 4h4.1v5h-5l-1.2 6h-4.9l1.2-6h-3.8l-1.2 6h-4.8l1.2-6H94v-5h3.5l.9-4H94v-5h5.3l1.2-6h4.9l-1.2 6h3.8l1.2-6h4.8l-1.2 6h2.2v5zm-12.7 4h3.8l.9-4h-3.8z"/></svg>C#</dt><dd>изучаю</dd></div>
+    </dl>
   </section>
 
-  <section id="arsenal">
-    <span class="eyebrow" data-i18n="arsenal.eyebrow">Стек</span>
-    <h2 class="sec-title" data-i18n="arsenal.title">Арсенал</h2>
-    <p class="sec-desc" data-i18n="arsenal.desc">Технологии и уровень владения каждой</p>
-
-    <div class="arsenal-grid">
-      <div class="arsenal-card">
-        <h3 data-i18n="arsenal.languages">Languages</h3>
-        <div class="skill-row"><span>Python</span><div class="skill-row-inner"><div class="skill-bar"><span style="width:95%"></span></div></div></div>
-        <div class="skill-row"><span>Golang</span><div class="skill-row-inner"><div class="skill-bar"><span style="width:80%"></span></div></div></div>
-        <div class="skill-row"><span>C++</span><div class="skill-row-inner"><div class="skill-bar"><span style="width:35%"></span></div></div></div>
-        <div class="skill-row"><span>Bash</span><div class="skill-row-inner"><div class="skill-bar"><span style="width:75%"></span></div></div></div>
-      </div>
-
-      <div class="arsenal-card">
-        <h3 data-i18n="arsenal.backend">Backend</h3>
-        <div class="skill-row"><span>MySQL</span><div class="skill-row-inner"><div class="skill-bar"><span style="width:85%"></span></div></div></div>
-        <div class="skill-row"><span>MariaDB</span><div class="skill-row-inner"><div class="skill-bar"><span style="width:80%"></span></div></div></div>
-        <div class="skill-row"><span>PostgreSQL</span><div class="skill-row-inner"><div class="skill-bar"><span style="width:80%"></span></div></div></div>
-        <div class="skill-row"><span>REST API</span><div class="skill-row-inner"><div class="skill-bar"><span style="width:85%"></span></div></div></div>
-      </div>
-
-      <div class="arsenal-card">
-        <h3 data-i18n="arsenal.frontend">Frontend</h3>
-        <div class="skill-row"><span>HTML5</span><div class="skill-row-inner"><div class="skill-bar"><span style="width:85%"></span></div></div></div>
-        <div class="skill-row"><span>CSS3</span><div class="skill-row-inner"><div class="skill-bar"><span style="width:80%"></span></div></div></div>
-        <div class="skill-row"><span>JavaScript</span><div class="skill-row-inner"><div class="skill-bar"><span style="width:80%"></span></div></div></div>
-        <div class="skill-row"><span>UI / UX</span><div class="skill-row-inner"><div class="skill-bar"><span style="width:60%"></span></div></div></div>
-      </div>
-
-      <div class="arsenal-card">
-        <h3 data-i18n="arsenal.offensive">Offensive</h3>
-        <div class="skill-row"><span>OSINT</span><div class="skill-row-inner"><div class="skill-bar"><span style="width:85%"></span></div></div></div>
-        <div class="skill-row"><span data-i18n="arsenal.exploitation">Exploitation</span><div class="skill-row-inner"><div class="skill-bar"><span style="width:50%"></span></div></div></div>
-        <div class="skill-row"><span data-i18n="arsenal.payload">Payload dev</span><div class="skill-row-inner"><div class="skill-bar"><span style="width:55%"></span></div></div></div>
-        <div class="skill-row"><span>CTF</span><div class="skill-row-inner"><div class="skill-bar"><span style="width:80%"></span></div></div></div>
-      </div>
-    </div>
+  <section>
+    <h2>Проекты</h2>
+    <p class="muted">Проекты скоро появятся здесь.</p>
   </section>
 
-  <section id="principles">
-    <span class="eyebrow" data-i18n="principles.eyebrow">Подход</span>
-    <h2 class="sec-title" data-i18n="principles.title">Принципы</h2>
-    <p class="sec-desc" data-i18n="principles.desc">Пять правил, которых придерживаюсь в работе</p>
-
-    <div class="principles-list">
-      <div class="principle-row">
-        <span class="principle-num">01</span>
-        <div>
-          <div class="principle-title" data-i18n="p1.title">Думай как атакующий</div>
-          <div class="principle-desc" data-i18n="p1.desc">Каждая система — набор предположений. Найди ложное.</div>
-        </div>
-      </div>
-      <div class="principle-row">
-        <span class="principle-num">02</span>
-        <div>
-          <div class="principle-title" data-i18n="p2.title">Инструменты — не повод для гордости</div>
-          <div class="principle-desc" data-i18n="p2.desc">Используй всё, что работает. Включая ИИ.</div>
-        </div>
-      </div>
-      <div class="principle-row">
-        <span class="principle-num">03</span>
-        <div>
-          <div class="principle-title" data-i18n="p3.title">Документируй</div>
-          <div class="principle-desc" data-i18n="p3.desc">Неописанный эксплойт — мусор.</div>
-        </div>
-      </div>
-      <div class="principle-row">
-        <span class="principle-num">04</span>
-        <div>
-          <div class="principle-title" data-i18n="p4.title">Учись постоянно</div>
-          <div class="principle-desc" data-i18n="p4.desc">C++ учится. Golang углубляется. Стек расширяется.</div>
-        </div>
-      </div>
-      <div class="principle-row">
-        <span class="principle-num">05</span>
-        <div>
-          <div class="principle-title" data-i18n="p5.title">Эго — офф</div>
-          <div class="principle-desc" data-i18n="p5.desc">Тот, кто думает, что знает всё, не видит собственных дыр.</div>
-        </div>
-      </div>
-    </div>
+  <section>
+    <h2>Контакты</h2>
+    <dl>
+      <div class="row"><dt><svg class="ic" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>Telegram</dt><dd><a href="https://t.me/rvoxel">t.me/rvoxel</a></dd></div>
+      <div class="row"><dt><svg class="ic" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>GitHub</dt><dd><a href="https://github.com/rv0x3l">github.com/rv0x3l</a></dd></div>
+      <div class="row"><dt>Почта</dt><dd>rv0x3l@rv0x3l.su, временно недоступна</dd></div>
+    </dl>
   </section>
-
-  <section id="connect">
-    <span class="eyebrow" data-i18n="connect.eyebrow">Контакты</span>
-    <h2 class="sec-title" data-i18n="connect.title">Связь</h2>
-    <p class="sec-desc" data-i18n="connect.desc">Выбери удобный канал</p>
-
-    <div class="connect-grid">
-      <a class="connect-card" href="https://t.me/rv0x3l" target="_blank" rel="noopener">
-        <div class="connect-icon-row">
-          <span class="connect-proto">Telegram</span>
-          <span class="connect-arrow">→</span>
-        </div>
-        <span class="connect-value">@rv0x3l</span>
-      </a>
-      <a class="connect-card" href="https://github.com/rv0x3l" target="_blank" rel="noopener">
-        <div class="connect-icon-row">
-          <span class="connect-proto">GitHub</span>
-          <span class="connect-arrow">→</span>
-        </div>
-        <span class="connect-value">github.com/rv0x3l</span>
-      </a>
-      <a class="connect-card" href="mailto:rv0x3l@rv0x3l.su">
-        <div class="connect-icon-row">
-          <span class="connect-proto">Email</span>
-          <span class="connect-arrow">→</span>
-        </div>
-        <span class="connect-value">rv0x3l@rv0x3l.su</span>
-      </a>
-    </div>
-  </section>
-
 </main>
-
-<footer>
-  <span data-i18n="footer.left">rv0x3l © 2025</span>
-  <span class="footer-status">
-    <span class="status-dot" style="position:static;"></span>
-    <span data-i18n="footer.status">system operational</span>
-  </span>
-</footer>
-
-<script>
-(function() {
-
-  var dict = {
-    ru: {
-      'nav.about': 'О себе',
-      'nav.arsenal': 'Стек',
-      'nav.principles': 'Принципы',
-      'nav.connect': 'Контакты',
-      'hero.status': 'открыт для сотрудничества',
-      'hero.title': 'Пишу код.<br>Ломаю системы.<br><span class="accent">Легально.</span>',
-      'hero.lede': '17 лет, fullstack-разработчик и red team операционист. Python, Go, C++ на бэкенде — OSINT и эксплуатация на стороне атаки.',
-      'hero.cta.primary': 'Связаться',
-      'hero.cta.secondary': 'Посмотреть стек',
-      'meta.role.k': 'Роль',
-      'meta.role.v': 'Fullstack / Red Team',
-      'meta.stack.k': 'Стек',
-      'meta.focus.k': 'Фокус',
-      'meta.focus.v': 'CTF, OSINT',
-      'meta.ai.k': 'ИИ в работе',
-      'meta.ai.v': 'Открыто, честно',
-      'about.eyebrow': 'О себе',
-      'about.title': 'Как я работаю',
-      'about.desc': 'Коротко о подходе и о том, откуда растёт стек',
-      'about.side.age.k': 'Возраст',
-      'about.side.start.k': 'Начал с',
-      'about.side.now.k': 'Сейчас',
-      'about.side.now.v': 'Golang',
-      'about.side.learning.k': 'Изучаю',
-      'about.p1': 'Начал с Python, сейчас плотно работаю с Golang для быстрых и лёгких тулзов. C++ пока в режиме обучения — он учит думать иначе, и в этом его ценность.',
-      'about.p2': 'По стеку — фуллстек. Бэкенд на MySQL / MariaDB / PostgreSQL, фронтенд на ванильных HTML / CSS / JS. Не потому что не умею фреймворки, а потому что знаю, как всё работает под капотом.',
-      'about.p3': '<strong>Red Team</strong> для меня — не эстетика, а инженерия. Понять систему глубже, чем её создатель. Найти, где она ломается. Доказать. Задокументировать.',
-      'about.p4': 'Использую ИИ для сложных расчётов и нетривиальных задач и не скрываю это. Реальная сила не в отказе от помощи, а в умении задавать правильные вопросы и проверять ответы.',
-      'arsenal.eyebrow': 'Стек',
-      'arsenal.title': 'Арсенал',
-      'arsenal.desc': 'Технологии и уровень владения каждой',
-      'arsenal.languages': 'Languages',
-      'arsenal.backend': 'Backend',
-      'arsenal.frontend': 'Frontend',
-      'arsenal.offensive': 'Offensive',
-      'arsenal.exploitation': 'Exploitation',
-      'arsenal.payload': 'Payload dev',
-      'principles.eyebrow': 'Подход',
-      'principles.title': 'Принципы',
-      'principles.desc': 'Пять правил, которых придерживаюсь в работе',
-      'p1.title': 'Думай как атакующий',
-      'p1.desc': 'Каждая система — набор предположений. Найди ложное.',
-      'p2.title': 'Инструменты — не повод для гордости',
-      'p2.desc': 'Используй всё, что работает. Включая ИИ.',
-      'p3.title': 'Документируй',
-      'p3.desc': 'Неописанный эксплойт — мусор.',
-      'p4.title': 'Учись постоянно',
-      'p4.desc': 'C++ учится. Golang углубляется. Стек расширяется.',
-      'p5.title': 'Эго — офф',
-      'p5.desc': 'Тот, кто думает, что знает всё, не видит собственных дыр.',
-      'connect.eyebrow': 'Контакты',
-      'connect.title': 'Связь',
-      'connect.desc': 'Выбери удобный канал',
-      'footer.left': 'rv0x3l © 2025',
-      'footer.status': 'система работает'
-    },
-    en: {
-      'nav.about': 'About',
-      'nav.arsenal': 'Stack',
-      'nav.principles': 'Principles',
-      'nav.connect': 'Connect',
-      'hero.status': 'available for collaboration',
-      'hero.title': 'I write code.<br>I break systems.<br><span class="accent">Legally.</span>',
-      'hero.lede': "17 years old, fullstack developer and red team operator. Python, Go, C++ on the backend - OSINT and exploitation on the offensive side.",
-      'hero.cta.primary': 'Get in touch',
-      'hero.cta.secondary': 'View stack',
-      'meta.role.k': 'Role',
-      'meta.role.v': 'Fullstack / Red Team',
-      'meta.stack.k': 'Stack',
-      'meta.focus.k': 'Focus',
-      'meta.focus.v': 'CTF, OSINT',
-      'meta.ai.k': 'AI use',
-      'meta.ai.v': 'Open, disclosed',
-      'about.eyebrow': 'About',
-      'about.title': 'How I work',
-      'about.desc': "A short brief on approach and where the stack comes from",
-      'about.side.age.k': 'Age',
-      'about.side.start.k': 'Started with',
-      'about.side.now.k': 'Now',
-      'about.side.now.v': 'Golang',
-      'about.side.learning.k': 'Learning',
-      'about.p1': "Started with Python, now working heavily with Golang for fast, lightweight tools. C++ is still in learning mode - it teaches you to think differently, and that's its value.",
-      'about.p2': "Fullstack by trade. Backend on MySQL / MariaDB / PostgreSQL, frontend on vanilla HTML / CSS / JS. Not because I can't use frameworks - because I know how things work under the hood.",
-      'about.p3': '<strong>Red Team</strong> is not an aesthetic to me, it is engineering. Understand a system deeper than its creator did. Find where it breaks. Prove it. Document it.',
-      'about.p4': "I use AI for complex calculations and non-trivial tasks, and I don't hide it. Real strength isn't refusing help - it's knowing how to ask the right questions and verify the answers.",
-      'arsenal.eyebrow': 'Stack',
-      'arsenal.title': 'Arsenal',
-      'arsenal.desc': 'Technologies and proficiency level for each',
-      'arsenal.languages': 'Languages',
-      'arsenal.backend': 'Backend',
-      'arsenal.frontend': 'Frontend',
-      'arsenal.offensive': 'Offensive',
-      'arsenal.exploitation': 'Exploitation',
-      'arsenal.payload': 'Payload dev',
-      'principles.eyebrow': 'Approach',
-      'principles.title': 'Principles',
-      'principles.desc': 'Five rules I follow in my work',
-      'p1.title': 'Think like an attacker',
-      'p1.desc': 'Every system is a set of assumptions. Find the false one.',
-      'p2.title': "Tools aren't a matter of pride",
-      'p2.desc': 'Use whatever works. Including AI.',
-      'p3.title': 'Document everything',
-      'p3.desc': 'An undocumented exploit is garbage.',
-      'p4.title': 'Keep learning',
-      'p4.desc': 'C++ is learning. Golang is deepening. The stack keeps growing.',
-      'p5.title': 'Ego off',
-      'p5.desc': "Whoever thinks they know everything can't see their own holes.",
-      'connect.eyebrow': 'Contact',
-      'connect.title': 'Connect',
-      'connect.desc': 'Pick the channel that works for you',
-      'footer.left': 'rv0x3l © 2025',
-      'footer.status': 'system operational'
-    }
-  };
-
-  function applyLang(lang) {
-    document.documentElement.setAttribute('lang', lang);
-    document.querySelectorAll('[data-i18n]').forEach(function(el) {
-      var key = el.getAttribute('data-i18n');
-      if (dict[lang][key] !== undefined) {
-        el.innerHTML = dict[lang][key];
-      }
-    });
-    document.querySelectorAll('.lang-btn').forEach(function(btn) {
-      var isActive = btn.getAttribute('data-lang') === lang;
-      btn.classList.toggle('active', isActive);
-      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-    });
-    try { localStorage.setItem('rv0x3l_lang', lang); } catch (e) {}
-  }
-
-  document.querySelectorAll('.lang-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      applyLang(btn.getAttribute('data-lang'));
-    });
-  });
-
-  var savedLang = 'ru';
-  try {
-    var stored = localStorage.getItem('rv0x3l_lang');
-    if (stored === 'ru' || stored === 'en') savedLang = stored;
-  } catch (e) {}
-
-  applyLang(savedLang);
-
-})();
-</script>
-
 </body>
 </html>
